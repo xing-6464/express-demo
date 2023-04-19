@@ -2,12 +2,16 @@ const { MongoClient } = require('mongodb');
 
 const client = new MongoClient('mongodb://127.0.0.1:27017');
 
-const main = async () => {
-  await client.connect();
+const clientFun = async ff => {
+  await client.db('mytest');
   const db = client.db('mytest');
-  const ff = db.collection('ff');
-  const d = await ff.find();
-  console.info(await d.toArray());
+  return db.collection(ff);
+};
+
+const main = async () => {
+  const ff = await clientFun('ff');
+  const d = await ff.insertOne({ username: 'test', age: 20 });
+  console.info(d);
 };
 
 main().finally(() => client.close());
